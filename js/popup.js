@@ -78,7 +78,6 @@ const defaultOptions = {
         "cumulative_gpa": { "name": "Cumulative GPA", "hidden": false, "weight": "dnc", "credits": 999, "gr": 3.21 },
         "card_method_date": false,
         "card_method_dashboard": false,
-        "card_limit": 25,
     }
 };
 
@@ -155,18 +154,6 @@ function setupAutoDarkInput(initial, time) {
     });
 }
 
-function setupCardLimitSlider(initial) {
-    let el = document.querySelector("#card_limit");
-    el.value = initial;
-    document.querySelector("#card_limit_num").textContent = initial;
-    el.addEventListener("change", (e) => {
-        chrome.storage.sync.set({ "custom_cards": {}, "custom_cards_2": {}, "custom_cards_3": {}, "card_limit": parseInt(e.target.value)});
-    });
-    el.addEventListener("input", (e) => {
-        document.querySelector("#card_limit_num").textContent = e.target.value;
-    })
-}
-
 function setupDashboardMethod(initial) {
     const el = document.getElementById("card_method_dashboard");
     el.checked = initial === true ? true : false;
@@ -196,7 +183,6 @@ function setup() {
             { "identifier": "auto_dark_end", "setup": (initial) => setupAutoDarkInput(initial, "auto_dark_end") },
             { "identifier": "num_assignments", "setup": (initial) => setupAssignmentsSlider(initial) },
             { "identifier": "num_todo_items", "setup": (initial) => setupTodoSlider(initial) },
-            { "identifier": "card_limit", "setup": (initial) => setupCardLimitSlider(initial) },
             { "identifier": "card_method_dashboard", "setup": (initial) => setupDashboardMethod(initial) },
             { "identifier": "custom_styles", "setup": (initial) => setupCustomStyle(initial) }
         ],
@@ -417,6 +403,16 @@ function setup() {
         btn.addEventListener("click", () => {
             sendFromPopup("setcolors", colors);
         })
+    });
+
+    document.querySelector("#reset_cards_btn").addEventListener("click", () => {
+        resetAllCards();
+    });
+    document.querySelector("#hide_images_btn").addEventListener("click", () => {
+        hideCardImages();
+    });
+    document.querySelector("#hide_links_btn").addEventListener("click", () => {
+        hideCardLinks();
     });
 
     // activate sidebar tool radio
@@ -745,6 +741,70 @@ function displayAdvancedCards() {
         } else {
             document.querySelector(".advanced-cards").innerHTML = `<div class="option-container"><h3>Couldn't find your cards!<br/>You may need to refresh your Canvas page and/or this menu page.<br/><br/>If you're having issues please contact me - ksucpea@gmail.com</h3></div>`;
         }
+    });
+}
+
+function resetAllCards() {
+    chrome.storage.sync.get(["custom_cards", "custom_cards_2"], (storage) => {
+        let customCards = storage.custom_cards || {};
+        let customCards2 = storage.custom_cards_2 || {};
+
+        Object.keys(customCards).forEach(key => {
+            customCards[key].img = ""; 
+
+            if (customCards2[key] && customCards2[key].links) {
+                let links = customCards2[key].links;
+                Object.keys(links).forEach(i => {
+                    links[i].is_default = true;
+                    links[i].path = links[i].default;
+                });
+            }
+        });
+
+        chrome.storage.sync.set({ 
+            "custom_cards": customCards, 
+            "custom_cards_2": customCards2 
+        }, () => {
+            displayAdvancedCards(); 
+        });
+    });
+}
+function hideCardImages() {
+    chrome.storage.sync.get("custom_cards", (storage) => {
+        const customCards = storage.custom_cards;
+        if (!customCards) return;
+
+        Object.keys(customCards).forEach(key => {
+            customCards[key].img = "none";
+        });
+
+        chrome.storage.sync.set({ "custom_cards": customCards }, () => {
+            displayAdvancedCards(); 
+        });
+    });
+}
+
+function hideCardLinks() {
+    chrome.storage.sync.get(["custom_cards", "custom_cards_2"], (storage) => {
+        let customCards = storage.custom_cards || {};
+        let customCards2 = storage.custom_cards_2 || {};
+
+        Object.keys(customCards).forEach(key => {
+            if (customCards2[key] && customCards2[key].links) {
+                let links = customCards2[key].links;
+                Object.keys(links).forEach(i => {
+                    links[i].is_default = false;
+                    links[i].path = "none";
+                });
+            }
+        });
+
+        chrome.storage.sync.set({ 
+            "custom_cards": customCards, 
+            "custom_cards_2": customCards2 
+        }, () => {
+            displayAdvancedCards(); 
+        });
     });
 }
 

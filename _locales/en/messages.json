@@ -211,5 +211,14 @@
   },
   "fix_dm_text": {
     "message": "The Fixer Is Automatically Running On These Pages:"
+  },
+  "reset_card_btn": {
+    "message": "Reset All"
+  },
+  "hide_images_btn": {
+    "message": "Hide Card Images"
+  },
+  "hide_links_btn": {
+    "message": "Hide Card Links"
   }
 }
