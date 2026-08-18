@@ -1,6 +1,6 @@
 {
   "clean_canvas": {
-    "message": "更好的画布"
+    "message": "Clean Canvas"
   },
   "updates": {
     "message": "更新"
@@ -160,6 +160,21 @@
   },
   "dark_mint": {
     "message": "分钟数"
+  },
+  "dark_dracula": {
+    "message": "Dracula"
+  },
+  "dark_latte": {
+    "message": "Catppuccin Latte"
+  },
+  "dark_frappe": {
+    "message": "Catppuccin Frappe"
+  },
+  "dark_macchiato": {
+    "message": "Catppuccin Macchiato"
+  },
+  "dark_mocha": {
+    "message": "Catppuccin Mocha"
   },
   "dp_sidebar_text": {
     "message": "侧边栏文本"

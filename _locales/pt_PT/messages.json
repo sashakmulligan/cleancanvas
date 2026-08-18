@@ -1,6 +1,6 @@
 {
   "clean_canvas": {
-    "message": "Melhor tela"
+    "message": "Clean Canvas"
   },
   "updates": {
     "message": "Atualizações"
@@ -160,6 +160,21 @@
   },
   "dark_mint": {
     "message": "Hortelã"
+  },
+  "dark_dracula": {
+    "message": "Dracula"
+  },
+  "dark_latte": {
+    "message": "Catppuccin Latte"
+  },
+  "dark_frappe": {
+    "message": "Catppuccin Frappe"
+  },
+  "dark_macchiato": {
+    "message": "Catppuccin Macchiato"
+  },
+  "dark_mocha": {
+    "message": "Catppuccin Mocha"
   },
   "dp_sidebar_text": {
     "message": "Texto da barra lateral"
